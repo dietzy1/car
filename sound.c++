@@ -1,4 +1,4 @@
-
+#include "sound.h"
 
 /* Use case 2: ”Afspil lyd”
 Mål

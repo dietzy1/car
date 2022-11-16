@@ -1,3 +1,4 @@
+#include "light.h"
 
 /* Use case 3: ”Styr forlys”
 Mål
