@@ -17,10 +17,18 @@ int main()
 {
     // Need to wait for button input to start the run might need 2 nested while loops to do this
     // instantiate a class object
-    car c;
+    car car;
     soundDriver sound;
     lightDriver light;
     motorDriver motor;
+
+    car.initButtonDriver();
+    car.initInterrupts();
+
+    // Start car
+    // play start sound
+    // turn on lights
+    // turn on motors after delay
 
     switch (c.counter)
     {

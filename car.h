@@ -1,9 +1,10 @@
 #pragma once
 
+// This class
 class car
 {
 private:
-    int counter;
     void initButtonDriver();
     void startCar();
+    void initInterrupts();
 };
