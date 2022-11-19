@@ -22,7 +22,7 @@ void SendInteger(int number)
 void SendString(char *String)
 {
     // Send the recieved string
-    while (*Streng != 0)
+    while (*String != 0)
     {
         SendChar(*String);
         String++;
@@ -39,7 +39,7 @@ void SendChar(char Char)
     UDR0 = Char;
 }
 
-void InitUART()
+uartDriver InitUART()
 {
     // Enable RX and TX
     UCSR0B = 0b00011000;
@@ -48,4 +48,6 @@ void InitUART()
     UCSR0C = 0b00000110;
     // Set baud rate
     UBRR0 = XTAL / 16 / 9600 - 1;
+
+    return uartDriver();
 }

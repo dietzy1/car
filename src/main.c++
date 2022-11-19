@@ -1,17 +1,24 @@
-#include "car.h"
-#include "light.h"
-#include "sound.h"
-#include "motor.h"
+#include "../lib/light/light.h"
+#include "../lib/sound/sound.h"
+#include "../lib/motor/motor.h"
+#include "../lib/sound/uart/uart.h"
+#include "main.h"
 
-#include <avr/io.h>
-#include <util/delay.h>
+#include "avr/io.h"
+#include "avr/interrupt.h"
+#include "util/delay.h"
 
-// using namespace std;
+#include <mutex>
 
 // Bilen skal have en variende acceleration baseret ud fra dens position på banen
 
 // I need to setup an interrupt that takes in input from left and right that increments the car counter when either of them are triggered
 // After trigger a timer is started that turns off input from the sensor after 0.5 seconds
+
+// global variable holding the counter
+volatile int counter = 0;
+// Global mutex to protect the counter
+std::mutex m;
 
 int main()
 {
@@ -21,52 +28,54 @@ int main()
     soundDriver sound;
     lightDriver light;
     motorDriver motor;
+    uartDriver uart;
+
+    sei();
+    initInterrupts();
 
     car.initButtonDriver();
-    car.initInterrupts();
+    sound.initSoundDriver();
+    light.initLightDriver();
+    motor.initMotorDriver();
+    uart.InitUART();
 
-    // Start car
-    // play start sound
-    // turn on lights
-    // turn on motors after delay
-
-    switch (c.counter)
+    switch (counter)
     {
     case 1:
         // turn on light 1
         light.turnOn(1);
         // play sound
-        sound.playSound(2);
+        sound.playSound(uart, 2);
         // start car
         motor.forward(255);
         break;
     case 2:
-        sound.playSound(2);
+        sound.playSound(uart, 2);
         // start car
         motor.forward(255);
         break;
     case 3:
-        sound.playSound(2);
+        sound.playSound(uart, 2);
         // start car
         motor.forward(255);
         break;
     case 4:
-        sound.playSound(2);
+        sound.playSound(uart, 2);
         // start car
         motor.forward(255);
         break;
     case 5:
-        sound.playSound(2);
+        sound.playSound(uart, 2);
         // start car
         motor.forward(255);
         break;
     case 6:
-        sound.playSound(2);
+        sound.playSound(uart, 2);
         // start car
         motor.forward(255);
         break;
     case 7:
-        sound.playSound(2);
+        sound.playSound(uart, 2);
         // start car
         motor.forward(255);
         break;
@@ -85,3 +94,39 @@ int main()
 // Ved 5 Skal bilen være i fuld stop og køreretningen skiftes til fremad
 // Ved 6 springes refleksen over
 // Ved 7 skal bilen i fuld stop relativt hurtigt for at bilen ikke kører længere end hvad banen har.
+
+// TODO:
+void car::initButtonDriver()
+{
+    DDRA = 0;
+    //
+}
+
+// TODO:
+
+ISR(INT2_vect) // Left sensor
+{
+    m.lock();
+    counter++;
+    _delay_ms(250);
+    m.unlock();
+}
+
+// TODO:
+ISR(INT3_vect) // Right sensor
+{
+    m.lock();
+    counter++;
+    _delay_ms(250);
+    m.unlock();
+}
+
+void initInterrupts()
+{
+    // TODO: This part I need to double check it is potentially incorrect
+    //  rising edge is set for bit 7 and 6 which is int 3 - falling edge is set for bit 5 and 4 which is int 2
+    EICRA = 0b11100000;
+
+    // Enables INT2 and INT3
+    EIMSK |= 0b00001100;
+}

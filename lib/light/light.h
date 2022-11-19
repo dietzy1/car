@@ -3,7 +3,7 @@
 class lightDriver
 
 {
-private:
+public:
     void initLightDriver();
     void turnOn(int);
     void turnOff(int);

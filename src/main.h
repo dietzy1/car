@@ -3,8 +3,8 @@
 // This class
 class car
 {
-private:
+public:
     void initButtonDriver();
-    void startCar();
+
     void initInterrupts();
 };

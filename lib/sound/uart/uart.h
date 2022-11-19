@@ -1,6 +1,6 @@
-#pragma once
 
-class uart
+
+class uartDriver
 {
 public:
     void InitUART();

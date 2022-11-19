@@ -3,7 +3,7 @@
 class motorDriver
 
 {
-private:
+public:
     void initMotorDriver();
     void stop();
     void forward(unsigned char);

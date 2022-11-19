@@ -1,4 +1,5 @@
 #include "sound.h"
+#include "uart/uart.h"
 
 /* Use case 2: ”Afspil lyd”
 Mål
@@ -18,7 +19,7 @@ void initSoundDriver()
 
     // initiate sound driver
 }
-void playSound()
+void playSound(uartDriver uart, int songNumber)
 {
     // 7E 03 00 00 01 FF FC EF play 1st track
     // 7E 03 00 00 02 FF FB EF play 2nd track
