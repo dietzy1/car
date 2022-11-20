@@ -39,7 +39,7 @@ void SendChar(char Char)
     UDR0 = Char;
 }
 
-uartDriver InitUART()
+uartDriver initUARTDriver()
 {
     // Enable RX and TX
     UCSR0B = 0b00011000;

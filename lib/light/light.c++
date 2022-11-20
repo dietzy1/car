@@ -21,3 +21,17 @@ Normalt scenarie
 * Baglyset skal lyse med kraftig styrke (”bremselys”), mens spændingens til bilens motor mindskes.
 Bremselyset skal herefter forblive tændt i 0,5 sekund +/- 0,1 sekund.
  */
+
+lightDriver initLightDriver()
+{
+    // initiate light driver
+    return lightDriver();
+}
+
+void lightDriver::turnOn(int lightNumber)
+{
+}
+
+void lightDriver::turnOff(int lightNumber)
+{
+}

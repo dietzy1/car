@@ -1,84 +1,88 @@
-#include "../lib/light/light.h"
-#include "../lib/sound/sound.h"
-#include "../lib/motor/motor.h"
-#include "../lib/sound/uart/uart.h"
+//#include "../lib/light/light.h"
+//#include "../lib/sound/sound.h"
+#include "../light/light.h"
+#include "../sound/sound.h"
+#include "../sound/uart.h"
+#include "../motor/motor.h"
+
+//#include "../lib/motor/motor.h"
+
+//#include "../lib/sound/uart/uart.h"
 #include "main.h"
 
 #include "avr/io.h"
 #include "avr/interrupt.h"
 #include "util/delay.h"
 
-#include <mutex>
-
-// Bilen skal have en variende acceleration baseret ud fra dens position på banen
-
-// I need to setup an interrupt that takes in input from left and right that increments the car counter when either of them are triggered
-// After trigger a timer is started that turns off input from the sensor after 0.5 seconds
-
-// global variable holding the counter
+// Global variable holding the counter
 volatile int counter = 0;
-// Global mutex to protect the counter
-std::mutex m;
+// Global variable to project the counter against multiple interrupts incrementing the counter
+volatile bool boolio = false;
 
 int main()
 {
-    // Need to wait for button input to start the run might need 2 nested while loops to do this
-    // instantiate a class object
+    // Initiate all drivers and their dependencies
     car car;
-    soundDriver sound;
-    lightDriver light;
-    motorDriver motor;
-    uartDriver uart;
-
+    soundDriver sound = initSoundDriver();
+    lightDriver light = initLightDriver();
+    motorDriver motor = initMotorDriver();
+    uartDriver uart = initUARTDriver();
     sei();
-    initInterrupts();
 
     car.initButtonDriver();
-    sound.initSoundDriver();
-    light.initLightDriver();
-    motor.initMotorDriver();
-    uart.InitUART();
 
-    switch (counter)
+    car.initInterrupts();
+    while (boolio == true)
     {
-    case 1:
-        // turn on light 1
         light.turnOn(1);
-        // play sound
-        sound.playSound(uart, 2);
-        // start car
+        sound.playSound(uart, 1);
         motor.forward(255);
-        break;
-    case 2:
-        sound.playSound(uart, 2);
-        // start car
-        motor.forward(255);
-        break;
-    case 3:
-        sound.playSound(uart, 2);
-        // start car
-        motor.forward(255);
-        break;
-    case 4:
-        sound.playSound(uart, 2);
-        // start car
-        motor.forward(255);
-        break;
-    case 5:
-        sound.playSound(uart, 2);
-        // start car
-        motor.forward(255);
-        break;
-    case 6:
-        sound.playSound(uart, 2);
-        // start car
-        motor.forward(255);
-        break;
-    case 7:
-        sound.playSound(uart, 2);
-        // start car
-        motor.forward(255);
-        break;
+
+        switch (counter)
+        {
+        case 1:
+            // turn on light 1
+            light.turnOn(1);
+            // play sound
+            sound.playSound(uart, 2);
+            // start car
+            motor.forward(255);
+            break;
+        case 2:
+            sound.playSound(uart, 2);
+            // start car
+            motor.forward(255);
+            break;
+        case 3:
+            sound.playSound(uart, 2);
+            // start car
+            motor.forward(255);
+            break;
+        case 4:
+            sound.playSound(uart, 2);
+            // start car
+            motor.forward(255);
+            break;
+        case 5:
+            sound.playSound(uart, 2);
+            // start car
+            motor.forward(255);
+            break;
+        case 6:
+            sound.playSound(uart, 2);
+            // start car
+            motor.forward(255);
+            break;
+        case 7:
+            sound.playSound(uart, 2);
+            // start car
+            motor.forward(255);
+            break;
+        }
+    }
+    while (1)
+    {
+        // do nothing
     }
 }
 
@@ -99,29 +103,36 @@ int main()
 void car::initButtonDriver()
 {
     DDRA = 0;
-    //
 }
 
 // TODO:
 
 ISR(INT2_vect) // Left sensor
 {
-    m.lock();
-    counter++;
-    _delay_ms(250);
-    m.unlock();
+    if (boolio == false)
+    {
+        boolio = true;
+        counter++;
+        _delay_ms(250);
+        boolio = false;
+    };
+    return;
 }
 
 // TODO:
 ISR(INT3_vect) // Right sensor
 {
-    m.lock();
-    counter++;
-    _delay_ms(250);
-    m.unlock();
+    if (boolio == false)
+    {
+        boolio = true;
+        counter++;
+        _delay_ms(250);
+        boolio = false;
+    };
+    return;
 }
 
-void initInterrupts()
+void car::initInterrupts()
 {
     // TODO: This part I need to double check it is potentially incorrect
     //  rising edge is set for bit 7 and 6 which is int 3 - falling edge is set for bit 5 and 4 which is int 2

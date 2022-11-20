@@ -1,5 +1,7 @@
+
+
+#include "uart.h"
 #include "sound.h"
-#include "uart/uart.h"
 
 /* Use case 2: ”Afspil lyd”
 Mål
@@ -11,15 +13,16 @@ Normalt scenarie
 3. Når refleksbrik nummer 7 passeres, afspilles en specifik ”slutlyd” eller ”slutmelodi”.
  */
 
-void initSoundDriver()
+soundDriver initSoundDriver()
 {
 
     // 7E 09 00 00 02 FF F5 EF -play source to play from sd card
     // 7E 06 00 00 1E FF DC EF - set volume
 
     // initiate sound driver
+    return soundDriver();
 }
-void playSound(uartDriver uart, int songNumber)
+void soundDriver::playSound(uartDriver uart, int songNumber)
 {
     // 7E 03 00 00 01 FF FC EF play 1st track
     // 7E 03 00 00 02 FF FB EF play 2nd track
