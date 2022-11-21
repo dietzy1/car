@@ -8,7 +8,7 @@
 // Define maximum size of array to prevent buffer overflow
 #define SIZE 7
 
-void SendInteger(int number)
+/* void sendInteger(int number)
 {
     char array[SIZE];
     // Convert the integer to an ASCII string (array), radix = 10
@@ -16,20 +16,20 @@ void SendInteger(int number)
     // integer to array of chars from base 10
     itoa(number, array, 10);
 
-    SendString(array);
-}
+    sendString(array);
+} */
 
-void SendString(char *String)
+void uartDriver::sendString(char *String)
 {
     // Send the recieved string
     while (*String != 0)
     {
-        SendChar(*String);
+        sendChar(*String);
         String++;
     }
 }
 
-void SendChar(char Char)
+void sendChar(char Char)
 {
     // await transmitter register ready
     while ((UCSR0A & (1 << 5)) == 0)

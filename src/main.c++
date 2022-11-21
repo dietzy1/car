@@ -1,18 +1,12 @@
-//#include "../lib/light/light.h"
-//#include "../lib/sound/sound.h"
+#include "main.h"
 #include "../light/light.h"
 #include "../sound/sound.h"
 #include "../sound/uart.h"
 #include "../motor/motor.h"
 
-//#include "../lib/motor/motor.h"
-
-//#include "../lib/sound/uart/uart.h"
-#include "main.h"
-
-#include "avr/io.h"
-#include "avr/interrupt.h"
-#include "util/delay.h"
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include <util/delay.h>
 
 // Global variable holding the counter
 volatile int counter = 0;
@@ -23,15 +17,15 @@ int main()
 {
     // Initiate all drivers and their dependencies
     car car;
-    soundDriver sound = initSoundDriver();
+    uartDriver uart = initUARTDriver();
+    soundDriver sound = initSoundDriver(uart);
     lightDriver light = initLightDriver();
     motorDriver motor = initMotorDriver();
-    uartDriver uart = initUARTDriver();
+
     sei();
-
     car.initButtonDriver();
-
     car.initInterrupts();
+
     while (boolio == true)
     {
         light.turnOn(1);

@@ -3,11 +3,12 @@
 class uartDriver
 {
 public:
-    void SendInteger(int number);
+    // void sendInteger(int number);
+    void sendString(char *string);
 };
 
-void SendChar(char Char);
+void sendChar(char Char);
 
-void SendString(char *String);
+/* void sendString(char *String); */
 
 uartDriver initUARTDriver();

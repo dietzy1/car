@@ -8,4 +8,4 @@ public:
     void playSound(uartDriver, int);
 };
 
-soundDriver initSoundDriver();
+soundDriver initSoundDriver(uartDriver);
