@@ -13,19 +13,34 @@ Normalt scenarie
 3. Når refleksbrik nummer 7 passeres, afspilles en specifik ”slutlyd” eller ”slutmelodi”.
  */
 
-soundDriver initSoundDriver()
+soundDriver initSoundDriver(uartDriver uart)
 {
-
     // 7E 09 00 00 02 FF F5 EF -play source to play from sd card
-    // 7E 06 00 00 1E FF DC EF - set volume
+    uart.sendString("7E 09 00 00 02 FF F5 EF");
+
+    // 7E 06 00 00 1E FF DC EF - set volume to max
+    uart.sendString("7E 06 00 00 1E FF DC EF");
 
     // initiate sound driver
     return soundDriver();
 }
 void soundDriver::playSound(uartDriver uart, int songNumber)
 {
-    // 7E 03 00 00 01 FF FC EF play 1st track
-    // 7E 03 00 00 02 FF FB EF play 2nd track
+    switch (songNumber)
+    {
+    case 1:
+        // 7E 03 00 00 01 FF FC EF play 1st track
+        uart.sendString("7E 03 00 00 01 FF FC EF");
+        break;
+    case 2:
+        // 7E 03 00 00 02 FF FB EF play 2nd track
+        uart.sendString("7E 03 00 00 02 FF FB EF");
+        break;
+    case 3:
+        // 7E 03 00 00 03 FF FA EF play 3rd track
+        uart.sendString("7E 03 00 00 03 FF FA EF");
+        break;
+    default:
+        break;
+    };
 }
-
-// Checksum (2 bytes) = 0xFFFF – (CMD + Feedback + Para1 + Para2) + 1
