@@ -28,10 +28,18 @@ lightDriver initLightDriver()
     return lightDriver();
 }
 
-void lightDriver::turnOn(int lightNumber)
+void lightDriver::turnOnFrontlight()
 {
 }
 
-void lightDriver::turnOff(int lightNumber)
+void lightDriver::turnOffFrontlight()
+{
+}
+
+void lightDriver::turnOnBrakeLight(int intensity)
+{
+}
+
+void lightDriver::turnOffBrakeLight()
 {
 }

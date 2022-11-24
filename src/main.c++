@@ -26,9 +26,11 @@ int main()
     car.initButtonDriver();
     car.initInterrupts();
 
+    sound.playSound(uart, 1);
+
     while (boolio == true)
     {
-        light.turnOn(1);
+        light.turnOnFrontlight();
         sound.playSound(uart, 1);
         motor.forward(255);
 
@@ -36,7 +38,7 @@ int main()
         {
         case 1:
             // turn on light 1
-            light.turnOn(1);
+            light.turnOnBrakeLight(1);
             // play sound
             sound.playSound(uart, 2);
             // start car
@@ -61,6 +63,7 @@ int main()
             sound.playSound(uart, 2);
             // start car
             motor.forward(255);
+
             break;
         case 6:
             sound.playSound(uart, 2);

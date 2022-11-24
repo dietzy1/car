@@ -46,6 +46,7 @@ uartDriver initUARTDriver()
 
     // Asynchronous mode, 1 stop bit, no parity, 8 data bits
     UCSR0C = 0b00000110;
+
     // Set baud rate
     UBRR0 = XTAL / 16 / 9600 - 1;
 

@@ -4,9 +4,10 @@ class lightDriver
 
 {
 public:
-    void turnOn(int);
-    void turnOff(int);
+    void turnOnFrontlight();
+    void turnOffFrontlight();
+    void turnOnBrakeLight(int);
+    void turnOffBrakeLight();
 };
 
 lightDriver initLightDriver();
-

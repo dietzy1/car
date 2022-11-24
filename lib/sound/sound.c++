@@ -24,6 +24,7 @@ soundDriver initSoundDriver(uartDriver uart)
     // initiate sound driver
     return soundDriver();
 }
+
 void soundDriver::playSound(uartDriver uart, int songNumber)
 {
     switch (songNumber)
