@@ -11,75 +11,105 @@
 // Global variable holding the counter
 volatile int counter = 0;
 // Global variable to project the counter against multiple interrupts incrementing the counter
-volatile bool boolio = false;
 
 int main()
 {
-    // Initiate all drivers and their dependencies
+
     car car;
     uartDriver uart = initUARTDriver();
     soundDriver sound = initSoundDriver(uart);
     lightDriver light = initLightDriver();
     motorDriver motor = initMotorDriver();
 
-    sei();
     car.initButtonDriver();
     car.initInterrupts();
 
-    sound.playSound(uart, 1);
-
-    while (boolio == true)
+    // While button is not pressed simply loop around for infinity
+    while (!ButtonPressed)
     {
-        light.turnOnFrontlight();
-        sound.playSound(uart, 1);
-        motor.forward(255);
+    }
+    // Initiate start of the car
+    light.turnOnFrontlight();
+    sound.playSound(uart, 1);
+    motor.forward(255);
 
+    // Start the loop that reacts to counter interrupts
+    while (1)
+    {
+        int checkCounter = 0;
         switch (counter)
         {
         case 1:
-            // turn on light 1
-            light.turnOnBrakeLight(1);
-            // play sound
-            sound.playSound(uart, 2);
-            // start car
-            motor.forward(255);
+            if (checkCounter == counter)
+            {
+                checkCounter++;
+                // turn on light 1
+                light.turnOnBrakeLight(1);
+                // play sound
+                sound.playSound(uart, 2);
+                // start car
+                motor.forward(255);
+            }
             break;
         case 2:
-            sound.playSound(uart, 2);
-            // start car
-            motor.forward(255);
+            if (checkCounter == counter)
+            {
+                checkCounter++;
+                sound.playSound(uart, 2);
+                // start car
+                motor.forward(255);
+            }
             break;
+
         case 3:
-            sound.playSound(uart, 2);
-            // start car
-            motor.forward(255);
+            if (checkCounter == counter)
+            {
+                checkCounter++;
+                sound.playSound(uart, 2);
+                // start car
+                motor.forward(255);
+            }
             break;
         case 4:
-            sound.playSound(uart, 2);
-            // start car
-            motor.forward(255);
+            if (checkCounter == counter)
+            {
+                checkCounter++;
+                sound.playSound(uart, 2);
+                // start car
+                motor.forward(255);
+            }
             break;
         case 5:
-            sound.playSound(uart, 2);
-            // start car
-            motor.forward(255);
+            if (checkCounter == counter)
+            {
+                checkCounter++;
+                sound.playSound(uart, 2);
+                // start car
+                motor.forward(255);
+            }
 
             break;
         case 6:
-            sound.playSound(uart, 2);
-            // start car
-            motor.forward(255);
+            if (checkCounter == counter)
+            {
+                checkCounter++;
+                sound.playSound(uart, 2);
+                // start car
+                motor.forward(255);
+            }
             break;
         case 7:
-            sound.playSound(uart, 2);
-            // start car
-            motor.forward(255);
+            if (checkCounter == counter)
+            {
+                checkCounter++;
+                sound.playSound(uart, 2);
+                // start car
+                motor.forward(255);
+            }
+            break;
+        default:
             break;
         }
-    }
-    while (1)
-    {
-        // do nothing
     }
 }
 
@@ -99,12 +129,25 @@ int main()
 // TODO:
 void car::initButtonDriver()
 {
-    DDRA = 0;
+    // 75AD3 which is the same as port 25 on the arduino
+    DDRA &= ~(1 << 3);
+}
+
+// Recieve signal from the button on PORTA
+char ButtonPressed()
+{
+    if (PORTA == 0b00010000)
+    {
+        return 1;
+    };
 }
 
 // TODO:
+// Should prolly be INT0_vect because its PD ben 0
 
-ISR(INT2_vect) // Left sensor
+volatile bool boolio = false;
+
+ISR(INT0_vect) // Left sensor
 {
     if (boolio == false)
     {
@@ -116,8 +159,8 @@ ISR(INT2_vect) // Left sensor
     return;
 }
 
-// TODO:
-ISR(INT3_vect) // Right sensor
+// TODO: //should prolly be INT1_vect because its PD ben 1
+ISR(INT1_vect) // Right sensor
 {
     if (boolio == false)
     {
@@ -129,12 +172,15 @@ ISR(INT3_vect) // Right sensor
     return;
 }
 
+// Function that enabled interupts for the left and right sensor on the car
 void car::initInterrupts()
 {
     // TODO: This part I need to double check it is potentially incorrect
-    //  rising edge is set for bit 7 and 6 which is int 3 - falling edge is set for bit 5 and 4 which is int 2
-    EICRA = 0b11100000;
 
-    // Enables INT2 and INT3
-    EIMSK |= 0b00001100;
+    // Rising edge interupt is enabled for INT0 and INT1
+    EICRA |= 0b00001111;
+    // Enables INT0 and INT1
+    EIMSK |= 0b00000011;
+    // call sei to enable interrupts
+    sei();
 }

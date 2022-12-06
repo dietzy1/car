@@ -9,3 +9,5 @@ public:
 void sendChar(char Char);
 
 uartDriver initUARTDriver();
+
+void sendString(uartDriver uart);

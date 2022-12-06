@@ -39,14 +39,25 @@ void sendChar(char Char)
     UDR0 = Char;
 }
 
+void sendString(uartDriver uart)
+{
+    sendChar(0x7E);
+    sendChar(0x0D);
+    sendChar(0x00);
+    sendChar(0x00);
+    sendChar(0x00);
+    sendChar(0xFF);
+    sendChar(0xF3);
+    sendChar(0xEF);
+}
+
+// initialize the uart driver so the transmit is set as output
 uartDriver initUARTDriver()
 {
     // Enable RX and TX
     UCSR0B = 0b00011000;
-
     // Asynchronous mode, 1 stop bit, no parity, 8 data bits
     UCSR0C = 0b00000110;
-
     // Set baud rate
     UBRR0 = XTAL / 16 / 9600 - 1;
 

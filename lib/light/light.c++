@@ -1,5 +1,7 @@
 #include "light.h"
 
+#include <avr/io.h>
+
 /* Use case 3: ”Styr forlys”
 Mål
 Denne use case beskriver styringen af bilens indbyggede forlys.
@@ -24,7 +26,13 @@ Bremselyset skal herefter forblive tændt i 0,5 sekund +/- 0,1 sekund.
 
 lightDriver initLightDriver()
 {
-    // initiate light driver
+    /*   // make pin 5 of PORTB an output
+      DDRB |= (1 << DDB5);
+
+      // turn on the light by setting pin 5 of PORTB high
+
+      PORTB |= (1 << PORTB5);
+   */
     return lightDriver();
 }
 
