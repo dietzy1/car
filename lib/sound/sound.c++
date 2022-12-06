@@ -24,7 +24,7 @@ soundDriver initSoundDriver(uartDriver uart)
 
       uart.sendString("0x7E0x030x000x000x010xFF0xFC0xEF");
       _delay_ms(50); */
-    sendString(uart);
+    /*  sendString(uart); */
     // initiate sound driver
     return soundDriver();
 }
@@ -35,17 +35,18 @@ void soundDriver::playSound(uartDriver uart, int songNumber)
     {
     case 1:
         // 7E 03 00 00 01 FF FC EF play 1st track
-        uart.sendString("0x7E0x030x000x000x010xFF0xFC0xEF");
+        char array[8] = {0x7E, 0x03, 0x00, 0x00, 0x02, 0xFF, 0xFB, 0xEF};
+        uart.sendCommand(array);
         _delay_ms(50);
         break;
     case 2:
         // 7E 03 00 00 02 FF FB EF play 2nd track
-        uart.sendString("7E 03 00 00 02 FF FB EF");
+        uart.sendCommand("7E 03 00 00 02 FF FB EF");
         _delay_ms(50);
         break;
     case 3:
         // 7E 03 00 00 03 FF FA EF play 3rd track
-        uart.sendString("7E 03 00 00 03 FF FA EF");
+        uart.sendCommand("7E 03 00 00 03 FF FA EF");
         _delay_ms(50);
         break;
     default:
