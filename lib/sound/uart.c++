@@ -4,30 +4,10 @@
 
 // Target CPU frequency
 #define XTAL 16000000
-
 // Define maximum size of array to prevent buffer overflow
 #define SIZE 7
 
-/* void sendInteger(int number)
-{
-    char array[SIZE];
-    // Convert the integer to an ASCII string (array), radix = 10
-
-    // integer to array of chars from base 10
-    itoa(number, array, 10);
-
-    sendString(array);
-} */
-
-void uartDriver::sendString(char *String)
-{
-    // Send the recieved string
-    while (*String != 0)
-    {
-        sendChar(*String);
-        String++;
-    }
-}
+void sendChar(char Char);
 
 void sendChar(char Char)
 {
@@ -49,6 +29,25 @@ void sendString(uartDriver uart)
     sendChar(0xFF);
     sendChar(0xF3);
     sendChar(0xEF);
+}
+
+/* void sendCommand(char *array)
+{
+    for (int i = 0; i < 8; i++)
+    {
+        sendChar(array[i]);
+    }
+} */
+
+// TODO:
+//  This command needs to be tested
+void uartDriver::sendCommand(char *array)
+{
+    for (int i = 0; i < 8; i++)
+    {
+        char tmp = array[i]; // This here is nessecary for some shitty reason which is beyond my comprehension
+        sendChar(tmp);
+    }
 }
 
 // initialize the uart driver so the transmit is set as output

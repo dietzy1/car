@@ -26,14 +26,15 @@ Bremselyset skal herefter forblive tændt i 0,5 sekund +/- 0,1 sekund.
 
 lightDriver initLightDriver()
 {
-    /*   // make pin 5 of PORTB an output
-      DDRB |= (1 << DDB5);
+  /*   // make pin 5 of PORTB an output
+    DDRB |= (1 << DDB5);
+    DDRB =0XFF
 
-      // turn on the light by setting pin 5 of PORTB high
+    // turn on the light by setting pin 5 of PORTB high
 
-      PORTB |= (1 << PORTB5);
-   */
-    return lightDriver();
+    PORTB |= (1 << PORTB5);
+ */
+  return lightDriver();
 }
 
 void lightDriver::turnOnFrontlight()

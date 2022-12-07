@@ -14,17 +14,7 @@ Normalt scenarie
 
 soundDriver initSoundDriver(uartDriver uart)
 {
-    // 7E 09 00 00 02 FF F5 EF -play source to play from sd card
-    /*   uart.sendString("7E 09 00 00 02 FF F5 EF");
-      _delay_ms(50); */
 
-    // 7E 06 00 00 1E FF DC EF - set volume to max
-    /*   uart.sendString("0x7E0x060x000x000x1E0xFF0xDC0xEF");
-      _delay_ms(50);
-
-      uart.sendString("0x7E0x030x000x000x010xFF0xFC0xEF");
-      _delay_ms(50); */
-    /*  sendString(uart); */
     // initiate sound driver
     return soundDriver();
 }
@@ -34,19 +24,25 @@ void soundDriver::playSound(uartDriver uart, int songNumber)
     switch (songNumber)
     {
     case 1:
-        // 7E 03 00 00 01 FF FC EF play 1st track
+
+        // plays 1st track in the 1st folder on the SD card
         char array[8] = {0x7E, 0x03, 0x00, 0x00, 0x02, 0xFF, 0xFB, 0xEF};
         uart.sendCommand(array);
         _delay_ms(50);
         break;
     case 2:
-        // 7E 03 00 00 02 FF FB EF play 2nd track
-        uart.sendCommand("7E 03 00 00 02 FF FB EF");
+        // TODO:: NOT TESTED YET NEED TO FIND OUT IF COMMAND IS VALID
+        //  plays 2nd track in the 1st folder on the SD card
+        char array[8] = {0x7E, 0x0F, 0x00, 0x01, 0x02, 0xFF, 0xEE, 0xEF};
+        uart.sendCommand(array);
         _delay_ms(50);
         break;
     case 3:
-        // 7E 03 00 00 03 FF FA EF play 3rd track
-        uart.sendCommand("7E 03 00 00 03 FF FA EF");
+        // TODO:: NOT TESTED YET NEED TO FIND OUT IF COMMAND IS VALID
+        //  plays 2nd track in the 1st folder on the SD card
+        char array[8] = {0x7E, 0x0f, 0x00, 0x01, 0x03, 0xff, 0xee, 0xEF};
+        uart.sendCommand(array);
+
         _delay_ms(50);
         break;
     default:

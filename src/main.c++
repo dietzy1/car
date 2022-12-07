@@ -1,31 +1,32 @@
-#include "main.h"
+
 #include "../light/light.h"
 #include "../sound/sound.h"
 #include "../sound/uart.h"
 #include "../motor/motor.h"
+#include "../car/car.h"
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-// Global variable holding the counter
-volatile int counter = 0;
-// Global variable to project the counter against multiple interrupts incrementing the counter
-
 int main()
 {
-
-    car car;
+    carDriver car = initCarDriver();
     uartDriver uart = initUARTDriver();
     soundDriver sound = initSoundDriver(uart);
     lightDriver light = initLightDriver();
     motorDriver motor = initMotorDriver();
 
-    car.initButtonDriver();
-    car.initInterrupts();
-
     // While button is not pressed simply loop around for infinity
-    while (!ButtonPressed)
+    /*  char array[8] = {0x7E, 0x0D, 0x00, 0x00, 0x00, 0xFF, 0xF3, 0xEF};
+     uart.sendCommand(array); */
+    char array[8] = {0x7E, 0x0D, 0x00, 0x00, 0x00, 0xFF, 0xF3, 0xEF};
+    uart.sendCommand(array);
+
+    /* sendString(uart); */
+
+    /* sendCommand(uart, 1); */
+    while (!car.buttonPressed())
     {
     }
     // Initiate start of the car
@@ -33,83 +34,13 @@ int main()
     sound.playSound(uart, 1);
     motor.forward(255);
 
+    // variable to ensure the cases in the while loop do not constantly run
+    int verifyCounter = 0;
     // Start the loop that reacts to counter interrupts
+
     while (1)
     {
-        int checkCounter = 0;
-        switch (counter)
-        {
-        case 1:
-            if (checkCounter == counter)
-            {
-                checkCounter++;
-                // turn on light 1
-                light.turnOnBrakeLight(1);
-                // play sound
-                sound.playSound(uart, 2);
-                // start car
-                motor.forward(255);
-            }
-            break;
-        case 2:
-            if (checkCounter == counter)
-            {
-                checkCounter++;
-                sound.playSound(uart, 2);
-                // start car
-                motor.forward(255);
-            }
-            break;
-
-        case 3:
-            if (checkCounter == counter)
-            {
-                checkCounter++;
-                sound.playSound(uart, 2);
-                // start car
-                motor.forward(255);
-            }
-            break;
-        case 4:
-            if (checkCounter == counter)
-            {
-                checkCounter++;
-                sound.playSound(uart, 2);
-                // start car
-                motor.forward(255);
-            }
-            break;
-        case 5:
-            if (checkCounter == counter)
-            {
-                checkCounter++;
-                sound.playSound(uart, 2);
-                // start car
-                motor.forward(255);
-            }
-
-            break;
-        case 6:
-            if (checkCounter == counter)
-            {
-                checkCounter++;
-                sound.playSound(uart, 2);
-                // start car
-                motor.forward(255);
-            }
-            break;
-        case 7:
-            if (checkCounter == counter)
-            {
-                checkCounter++;
-                sound.playSound(uart, 2);
-                // start car
-                motor.forward(255);
-            }
-            break;
-        default:
-            break;
-        }
+        car.controller(light, sound, uart, motor, verifyCounter);
     }
 }
 
@@ -127,7 +58,7 @@ int main()
 // Ved 7 skal bilen i fuld stop relativt hurtigt for at bilen ikke kører længere end hvad banen har.
 
 // TODO:
-void car::initButtonDriver()
+/* void car::initButtonDriver()
 {
     // 75AD3 which is the same as port 25 on the arduino
     DDRA &= ~(1 << 3);
@@ -140,12 +71,12 @@ char ButtonPressed()
     {
         return 1;
     };
-}
+} */
 
 // TODO:
 // Should prolly be INT0_vect because its PD ben 0
 
-volatile bool boolio = false;
+/* volatile bool boolio = false;
 
 ISR(INT0_vect) // Left sensor
 {
@@ -157,10 +88,10 @@ ISR(INT0_vect) // Left sensor
         boolio = false;
     };
     return;
-}
+} */
 
 // TODO: //should prolly be INT1_vect because its PD ben 1
-ISR(INT1_vect) // Right sensor
+/* ISR(INT1_vect) // Right sensor
 {
     if (boolio == false)
     {
@@ -170,10 +101,10 @@ ISR(INT1_vect) // Right sensor
         boolio = false;
     };
     return;
-}
+} */
 
 // Function that enabled interupts for the left and right sensor on the car
-void car::initInterrupts()
+/* void car::initInterrupts()
 {
     // TODO: This part I need to double check it is potentially incorrect
 
@@ -183,4 +114,4 @@ void car::initInterrupts()
     EIMSK |= 0b00000011;
     // call sei to enable interrupts
     sei();
-}
+} */

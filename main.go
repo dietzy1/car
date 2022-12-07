@@ -12,29 +12,49 @@ type arguments struct {
 	para2    int
 }
 
-/* func main() {
+func main() {
 	var arg arguments
 	fmt.Scanf("%x %x %x %x", &arg.cmd, &arg.feedback, &arg.para1, &arg.para2)
 	sum := calcChecksum(arg)
-	fmt.Printf("7E %s %s EF \n", fmt.Sprintf("%x %x %x %x", arg.cmd, arg.feedback, arg.para1, arg.para2), sum)
-} */
 
-func main() {
-	string := "7E 06 00 00 1E FF DC EF"
-	//split the spring by whitespace
-	s := strings.Fields(string)
-	fmt.Println(s)
-	result := fmt.Sprintf("0x%s0x%s0x%s0x%s0x%s0x%s0x%s0x%s ", s[0], s[1], s[2], s[3], s[4], s[5], s[6], s[7])
-	fmt.Println(result)
+	args := [4]string{}
+	for i := 0; i < 4; i++ {
+		if len(fmt.Sprintf("%x", arg.cmd)) < 2 {
+			args[0] = fmt.Sprintf("0%x", arg.cmd)
+			fmt.Println(args[0])
+		} else {
+			args[0] = fmt.Sprintf("%x", arg.cmd)
+		}
 
+		if len(fmt.Sprintf("%x", arg.feedback)) < 2 {
+			args[1] = fmt.Sprintf("0%x", arg.feedback)
+		} else {
+			args[1] = fmt.Sprintf("%x", arg.feedback)
+		}
+
+		if len(fmt.Sprintf("%x", arg.para1)) < 2 {
+			args[2] = fmt.Sprintf("0%x", arg.para1)
+		} else {
+			args[2] = fmt.Sprintf("%x", arg.para1)
+		}
+
+		if len(fmt.Sprintf("%x", arg.para2)) < 2 {
+			args[3] = fmt.Sprintf("0%x", arg.para2)
+		} else {
+			args[3] = fmt.Sprintf("%x", arg.para2)
+		}
+		for i := 0; i < 4; i++ {
+			args[i] = strings.ToUpper(args[i])
+		}
+	}
+	fmt.Printf("{0x7E, %s %s 0xEF} \n", fmt.Sprintf("0x%s, 0x%s, 0x%s, 0x%s,", args[0], args[1], args[2], args[3]), sum)
 }
 
-func formatString() {
-
-}
+//char array[8] = {0x7E, 0x03, 0x00, 0x00, 0x02, 0xFF, 0xFB, 0xEF};
 
 // Checksum (2 bytes) = 0xFFFF – (CMD + Feedback + Para1 + Para2) + 1
 func calcChecksum(arg arguments) string {
 	ok := 0xFFFF - (arg.cmd + arg.feedback + arg.para1 + arg.para2) + 1
-	return fmt.Sprintf("%x %x", ok>>8, ok&0xFF)
+	str1, str2 := strings.ToUpper(fmt.Sprintf("%x", ok>>8)), strings.ToUpper(fmt.Sprintf("%x", ok&0xFF))
+	return fmt.Sprintf("0x%s 0x%s", str1, str2)
 }

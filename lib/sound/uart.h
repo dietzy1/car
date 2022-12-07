@@ -3,11 +3,10 @@
 class uartDriver
 {
 public:
-    void sendString(char *string);
+    void sendCommand(char *array);
 };
-
-void sendChar(char Char);
 
 uartDriver initUARTDriver();
 
-void sendString(uartDriver uart);
+void sendString(uartDriver);
+// void sendCommand(char *array);
