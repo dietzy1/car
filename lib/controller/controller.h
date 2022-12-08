@@ -6,11 +6,11 @@
 #include "../motor/motor.h"
 #include "../sound/sound.h"
 
-class carDriver
+class controllerDriver
 {
 public:
     char buttonPressed();
-    void controller(lightDriver, soundDriver, uartDriver, motorDriver, int);
+    void ReactToInput(lightDriver, soundDriver, uartDriver, motorDriver, int);
 };
 
-carDriver initCarDriver();
+controllerDriver initControllerDriver();

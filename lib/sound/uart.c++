@@ -19,7 +19,7 @@ void sendChar(char Char)
     UDR0 = Char;
 }
 
-void sendString(uartDriver uart)
+/* void sendString(uartDriver uart)
 {
     sendChar(0x7E);
     sendChar(0x0D);
@@ -29,14 +29,6 @@ void sendString(uartDriver uart)
     sendChar(0xFF);
     sendChar(0xF3);
     sendChar(0xEF);
-}
-
-/* void sendCommand(char *array)
-{
-    for (int i = 0; i < 8; i++)
-    {
-        sendChar(array[i]);
-    }
 } */
 
 // TODO:

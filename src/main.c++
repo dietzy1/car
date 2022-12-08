@@ -3,7 +3,7 @@
 #include "../sound/sound.h"
 #include "../sound/uart.h"
 #include "../motor/motor.h"
-#include "../car/car.h"
+#include "../controller/controller.h"
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -11,7 +11,7 @@
 
 int main()
 {
-    carDriver car = initCarDriver();
+    controllerDriver controller = initControllerDriver();
     uartDriver uart = initUARTDriver();
     soundDriver sound = initSoundDriver(uart);
     lightDriver light = initLightDriver();
@@ -26,7 +26,7 @@ int main()
     /* sendString(uart); */
 
     /* sendCommand(uart, 1); */
-    while (!car.buttonPressed())
+    while (!controller.buttonPressed())
     {
     }
     // Initiate start of the car
@@ -40,7 +40,7 @@ int main()
 
     while (1)
     {
-        car.controller(light, sound, uart, motor, verifyCounter);
+        controller.ReactToInput(light, sound, uart, motor, verifyCounter);
     }
 }
 

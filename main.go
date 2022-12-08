@@ -21,7 +21,6 @@ func main() {
 	for i := 0; i < 4; i++ {
 		if len(fmt.Sprintf("%x", arg.cmd)) < 2 {
 			args[0] = fmt.Sprintf("0%x", arg.cmd)
-			fmt.Println(args[0])
 		} else {
 			args[0] = fmt.Sprintf("%x", arg.cmd)
 		}
@@ -56,5 +55,5 @@ func main() {
 func calcChecksum(arg arguments) string {
 	ok := 0xFFFF - (arg.cmd + arg.feedback + arg.para1 + arg.para2) + 1
 	str1, str2 := strings.ToUpper(fmt.Sprintf("%x", ok>>8)), strings.ToUpper(fmt.Sprintf("%x", ok&0xFF))
-	return fmt.Sprintf("0x%s 0x%s", str1, str2)
+	return fmt.Sprintf("0x%s, 0x%s,", str1, str2)
 }

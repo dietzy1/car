@@ -2,7 +2,7 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-#include "car.h"
+#include "controller.h"
 
 // Prototypes are declared in the .c++ file to prevent other files from calling them
 void initInterrupts();
@@ -16,11 +16,11 @@ volatile bool boolio = false;
 
 // Recieve signal from the button on PORTA
 // Should prolly be INT0_vect because its PD ben 0
-carDriver initCarDriver()
+controllerDriver initControllerDriver()
 {
     initInterrupts();
     initButtonDriver();
-    return carDriver();
+    return controllerDriver();
 }
 
 // Function that enabled interupts for the left and right sensor on the car
@@ -40,7 +40,7 @@ void initButtonDriver()
     DDRA &= ~(1 << 3);
 }
 
-char carDriver::buttonPressed()
+char controllerDriver::buttonPressed()
 {
     if (PORTA == 0b00010000)
     {
@@ -49,7 +49,7 @@ char carDriver::buttonPressed()
     return;
 }
 
-void carDriver::controller(lightDriver light, soundDriver sound, uartDriver uart, motorDriver motor, int verifyCounter)
+void controllerDriver::ReactToInput(lightDriver light, soundDriver sound, uartDriver uart, motorDriver motor, int verifyCounter)
 {
     switch (counter)
     {
