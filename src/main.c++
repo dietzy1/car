@@ -20,18 +20,22 @@ int main()
     // While button is not pressed simply loop around for infinity
     /*  char array[8] = {0x7E, 0x0D, 0x00, 0x00, 0x00, 0xFF, 0xF3, 0xEF};
      uart.sendCommand(array); */
-    char array[8] = {0x7E, 0x0D, 0x00, 0x00, 0x00, 0xFF, 0xF3, 0xEF};
-    uart.sendCommand(array);
 
-    /* sendString(uart); */
+    /*  char array[8] = {0x7E, 0x0D, 0x00, 0x00, 0x00, 0xFF, 0xF3, 0xEF};
+ uart.sendCommand(array); */
+
+    /*     sendString(uart); */
+
+    light.turnOnFrontlight();
 
     /* sendCommand(uart, 1); */
     while (!controller.buttonPressed())
     {
     }
     // Initiate start of the car
-    light.turnOnFrontlight();
-    sound.playSound(uart, 1);
+    // light.turnOnFrontlight();
+    light.turnOnBrakeLight(1);
+    /* sound.playSound(uart, 1); */
     motor.forward(255);
 
     // variable to ensure the cases in the while loop do not constantly run
@@ -40,7 +44,7 @@ int main()
 
     while (1)
     {
-        controller.ReactToInput(light, sound, uart, motor, verifyCounter);
+        controller.ReactToInput(light, sound, uart, motor, &verifyCounter);
     }
 }
 

@@ -10,3 +10,4 @@ uartDriver initUARTDriver();
 
 void sendString(uartDriver);
 // void sendCommand(char *array);
+void logError(char *array);

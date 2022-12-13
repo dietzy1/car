@@ -2,6 +2,7 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
+#include "uart.h"
 #include "controller.h"
 
 // Prototypes are declared in the .c++ file to prevent other files from calling them
@@ -49,13 +50,21 @@ char controllerDriver::buttonPressed()
     return;
 }
 
-void controllerDriver::ReactToInput(lightDriver light, soundDriver sound, uartDriver uart, motorDriver motor, int verifyCounter)
+void controllerDriver::ReactToInput(lightDriver light, soundDriver sound, uartDriver uart, motorDriver motor, int *verifyCounter)
 {
+
     switch (counter)
     {
+
+        /*     char array[] = {"Error: kekw"};
+            void logError(char array); */
+
     case 1:
-        if (verifyCounter == counter)
+        sendString(uart);
+        if (*verifyCounter == counter)
         {
+            sound.playSound(uart, 1);
+
             verifyCounter++;
             // turn on light 1
             light.turnOnBrakeLight(1);
@@ -66,8 +75,10 @@ void controllerDriver::ReactToInput(lightDriver light, soundDriver sound, uartDr
         }
         break;
     case 2:
-        if (verifyCounter == counter)
+
+        if (*verifyCounter == counter)
         {
+
             verifyCounter++;
             sound.playSound(uart, 2);
             // start car
@@ -76,8 +87,11 @@ void controllerDriver::ReactToInput(lightDriver light, soundDriver sound, uartDr
         break;
 
     case 3:
-        if (verifyCounter == counter)
+
+        if (*verifyCounter == counter)
         {
+            sound.playSound(uart, 1);
+
             verifyCounter++;
             sound.playSound(uart, 2);
             // start car
@@ -85,7 +99,7 @@ void controllerDriver::ReactToInput(lightDriver light, soundDriver sound, uartDr
         }
         break;
     case 4:
-        if (verifyCounter == counter)
+        if (*verifyCounter == counter)
         {
             verifyCounter++;
             sound.playSound(uart, 2);
@@ -94,7 +108,7 @@ void controllerDriver::ReactToInput(lightDriver light, soundDriver sound, uartDr
         }
         break;
     case 5:
-        if (verifyCounter == counter)
+        if (*verifyCounter == counter)
         {
             verifyCounter++;
             sound.playSound(uart, 2);
@@ -104,7 +118,7 @@ void controllerDriver::ReactToInput(lightDriver light, soundDriver sound, uartDr
 
         break;
     case 6:
-        if (verifyCounter == counter)
+        if (*verifyCounter == counter)
         {
             verifyCounter++;
             sound.playSound(uart, 2);
@@ -113,7 +127,7 @@ void controllerDriver::ReactToInput(lightDriver light, soundDriver sound, uartDr
         }
         break;
     case 7:
-        if (verifyCounter == counter)
+        if (*verifyCounter == counter)
         {
             verifyCounter++;
             sound.playSound(uart, 2);
@@ -126,13 +140,14 @@ void controllerDriver::ReactToInput(lightDriver light, soundDriver sound, uartDr
     }
 }
 
+// pd ben 0
 ISR(INT0_vect)
 {
     if (boolio == false)
     {
         boolio = true;
         counter++;
-        _delay_ms(250);
+        _delay_ms(2000);
         boolio = false;
     };
     return;
@@ -145,7 +160,7 @@ ISR(INT1_vect) // Right sensor
     {
         boolio = true;
         counter++;
-        _delay_ms(250);
+        _delay_ms(2000);
         boolio = false;
     };
 }

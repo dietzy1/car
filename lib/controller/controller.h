@@ -10,7 +10,7 @@ class controllerDriver
 {
 public:
     char buttonPressed();
-    void ReactToInput(lightDriver, soundDriver, uartDriver, motorDriver, int);
+    void ReactToInput(lightDriver, soundDriver, uartDriver, motorDriver, int *);
 };
 
 controllerDriver initControllerDriver();

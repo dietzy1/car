@@ -19,7 +19,7 @@ void sendChar(char Char)
     UDR0 = Char;
 }
 
-/* void sendString(uartDriver uart)
+void sendString(uartDriver uart)
 {
     sendChar(0x7E);
     sendChar(0x0D);
@@ -29,7 +29,7 @@ void sendChar(char Char)
     sendChar(0xFF);
     sendChar(0xF3);
     sendChar(0xEF);
-} */
+}
 
 // TODO:
 //  This command needs to be tested
@@ -39,6 +39,18 @@ void uartDriver::sendCommand(char *array)
     {
         char tmp = array[i]; // This here is nessecary for some shitty reason which is beyond my comprehension
         sendChar(tmp);
+    }
+}
+
+void logError(char *array)
+{
+    // Repeat until zero-termination
+    while (*array != 0)
+    {
+        // Send the character pointed to by "Streng"
+        sendChar(*array);
+        // Advance the pointer one step
+        array++;
     }
 }
 
