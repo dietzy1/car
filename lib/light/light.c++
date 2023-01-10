@@ -26,34 +26,22 @@ Bremselyset skal herefter forblive tændt i 0,5 sekund +/- 0,1 sekund.
 
 lightDriver initLightDriver()
 {
-  // make pin 5 of PORTB an output
-  DDRB = 0xFF;
+  // PB outputs and turn on LED4 to pin OC0A (pin 10)
+  DDRH = 0xFF; // Initiate PORTB as output
 
-  // PORTB = 0b10000000
-  // PORTB = 0b10000000; // Brug pin OC0A til at teste med 100% duty cycle (ca. 50 mA) & brug pin OC1A, som består af en duty cycle på 20% (ca. 10 mA)
-  // Mode = 3 (PWM, Phase Correct, 10 bit)
-  // Set OC1A on match down counting / Clear OC1A on match up counting
-  // Clock prescaler = 1
-
-  /* Når bilen er ved tilstanden "alm. lys" --> Duty cycle = 20% */
-
-  // Initalize timers with 8 bit resolution for timer 0
-  TCCR0A = 0b10000001;
-  TCCR0B = 0b00000101;
-
-  // turn on the light by setting pin 5 of PORTB high
+  DDRH = 0xFF;
 
   return lightDriver();
 }
 
 void lightDriver::turnOnFrontlight()
 {
-  PORTB = 0b00010000;
+  PORTH = 0b00010000; // Turn on PH4, equivalent to LED4
 }
 
 void lightDriver::turnOffFrontlight()
 {
-  PORTB = 0b00000000;
+  PORTH = 0b00000000;
 }
 
 void lightDriver::turnOnBrakeLight(int intensity)
@@ -65,14 +53,18 @@ void lightDriver::turnOnBrakeLight(int intensity)
   // Clock prescaler = 1
 
   /* Når bilen er ved tilstanden "alm. lys" --> Duty cycle = 20% */
+  TCCR4A = 0b00001011;
+  TCCR4B = 0b00000001;
 
   switch (intensity)
   {
   case 1:
-    OCR0A = 1024 / 5;
+    OCR4C = 1024 / 5;
     break;
   case 2:
-    OCR0A = 1024 / 2.5;
+    TCCR4A = 0b00000000; // Normal port operation
+    TCCR4B = 0b00000000; // Clock source deactivated (Timer/Counter stopped)
+    PORTH = 0b00110000;  // Turn on OC4C, as digital high (pin 8)
     break;
   default:
     break;
@@ -82,4 +74,35 @@ void lightDriver::turnOnBrakeLight(int intensity)
 void lightDriver::turnOffBrakeLight()
 {
   PORTB = 0b00000000;
+}
+
+int main(void)
+{
+  // PH outputs and turn on PH4 connected to pin OC4B (pin 7)
+  DDRH = 0xFF;
+  PORTH = 0b00010000; // Brug pin PH4 (OC4B/pin 10) til at teste med 100% duty cycle (ca. 50 mA) & brug pin OC4B (pin 8), som består af en duty cycle på 20% (ca. 10 mA)
+
+  //****TEST MED TIMER 4 in C-system
+
+  // Mode = 3 (PWM, Phase Correct, 10-bit, TOP = 0x03FF) - Best quality for lights, since you can't visually see the duty cycle
+  // INVERTING MODE: "Set OC0A on Compare Match, when up counting / Clear OC0A on Compare Match, when down counting"
+  // Clock prescaler = 1
+
+  TCCR4A = 0b00001011; // Mode 3, "PWM "IKKE fast", Phase Correct 10-bit, TOP = 0x03FF"
+  // (NON INVERTING MODE in C-system: "Clear OC1B (pin 12 on Compare Match, when up counting / Set OC1B on Compare Match, when down counting) - Can't figure out why that works, and why inverting mode doesn't work
+  // Initerer dog KUN systemet for baglys, fordi det kan godt afbryde motorens PWM-signaler
+  TCCR4B = 0b00000001; // Clock prescaler = 1
+
+  // Switch-statement:
+  /* Når bilen er ved tilstanden "alm. lys" --> Duty cycle = 20% (pin 12) */
+  OCR4C = 1024 / 5; // TOP-værdien for mode 3 er nemlig: TOP = 1024 = (1023 + 1)
+
+  /* Når bilen er ved tilstanden "bremse lys" --> Duty cycle = 100 % (pin 13)*/
+  // TCCR4A = 0b00000000; //Normal port operation
+  // TCCR4B = 0b00000000; //Clock source deactivated (Timer/Counter stopped)
+  // PORTH = 0b00100000; //Turn on OC4C, as digital high (pin 8)
+
+  // OCR4C = 1024 - SKRIV OM HVORFOR DET IKKE VIRKER ! ! ! !
+
+  //****SLUT MED TEST PÅ TIMER 4
 }
