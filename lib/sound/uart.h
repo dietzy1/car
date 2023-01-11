@@ -3,11 +3,8 @@
 class uartDriver
 {
 public:
+    uartDriver();
     void sendCommand(char *array);
 };
 
-uartDriver initUARTDriver();
-
-void sendString(uartDriver);
-// void sendCommand(char *array);
-void logError(char *array);
+void consoleLog(char *array);

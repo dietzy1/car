@@ -9,8 +9,17 @@
 class controllerDriver
 {
 public:
-    char buttonPressed();
-    void ReactToInput(lightDriver, soundDriver, uartDriver, motorDriver, int *);
-};
+    controllerDriver(lightDriver *, soundDriver *, motorDriver *);
 
-controllerDriver initControllerDriver();
+    char buttonPressed();
+    // void StartCar(lightDriver *, soundDriver *, uartDriver *, motorDriver *);
+    void StartCar();
+    // void ReactToInput(lightDriver *, soundDriver *, uartDriver *, motorDriver *, int *);
+    void ReactToInput();
+
+private:
+    int verifyCounter;
+    lightDriver *light;
+    soundDriver *sound;
+    motorDriver *motor;
+};

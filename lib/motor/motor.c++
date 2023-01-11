@@ -1,9 +1,8 @@
 #include "motor.h"
 
-motorDriver initMotorDriver()
+motorDriver::motorDriver()
 {
-
-    return motorDriver();
+    // initiate some ports here
 }
 
 void motorDriver::stop()

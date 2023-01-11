@@ -42,7 +42,7 @@ void uartDriver::sendCommand(char *array)
     }
 }
 
-void logError(char *array)
+void consoleLog(char *array)
 {
     // Repeat until zero-termination
     while (*array != 0)
@@ -54,8 +54,7 @@ void logError(char *array)
     }
 }
 
-// initialize the uart driver so the transmit is set as output
-uartDriver initUARTDriver()
+uartDriver::uartDriver()
 {
     // Enable RX and TX
     UCSR0B = 0b00011000;
@@ -63,6 +62,32 @@ uartDriver initUARTDriver()
     UCSR0C = 0b00000110;
     // Set baud rate
     UBRR0 = XTAL / 16 / 9600 - 1;
+}
 
-    return uartDriver();
+void SendString(char *Streng)
+{
+    // Repeat until zero-termination
+    while (*Streng != 0)
+    {
+        // Send the character pointed to by "Streng"
+        sendChar(*Streng);
+        // Advance the pointer one step
+        Streng++;
+    }
+}
+
+/*************************************************************************
+Converts the integer "Tal" to an ASCII string - and then sends this string
+using the USART.
+Makes use of the C standard library <stdlib.h>.
+Parameter:
+    Tal: The integer to be converted and sent.
+*************************************************************************/
+void SendInteger(int Tal)
+{
+    char array[7];
+    // Convert the integer to an ASCII string (array), radix = 10
+    itoa(Tal, array, 10);
+    // - then send the string
+    SendString(array);
 }

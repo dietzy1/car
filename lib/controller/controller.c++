@@ -17,11 +17,24 @@ volatile bool boolio = false;
 
 // Recieve signal from the button on PORTA
 // Should prolly be INT0_vect because its PD ben 0
-controllerDriver initControllerDriver()
+/* controllerDriver initControllerDriver()
 {
     initInterrupts();
     initButtonDriver();
     return controllerDriver();
+} */
+
+// Constructor
+controllerDriver::controllerDriver(lightDriver *light, soundDriver *sound, motorDriver *motor)
+{
+    this->light = light;
+    this->sound = sound;
+
+    this->motor = motor;
+    this->verifyCounter = 0;
+
+    initInterrupts();
+    initButtonDriver();
 }
 
 // Function that enabled interupts for the left and right sensor on the car
@@ -47,94 +60,101 @@ char controllerDriver::buttonPressed()
     {
         return 1;
     };
-    return;
+    return 0;
+    ;
+}
+// void controllerDriver::StartCar(lightDriver *light, soundDriver *sound, uartDriver *uart, motorDriver *motor)
+void controllerDriver::StartCar()
+{
+    this->sound->playSound(1);
+    this->light->turnOnFrontlight();
+    // Wait for a set amount (of time // figure out how much time the song needs
+    _delay_ms(5000);
+    this->motor->forward(255);
 }
 
-void controllerDriver::ReactToInput(lightDriver light, soundDriver sound, uartDriver uart, motorDriver motor, int *verifyCounter)
+// void controllerDriver::ReactToInput(lightDriver *light, soundDriver *sound, uartDriver *uart, motorDriver *motor, int *verifyCounter)
+void controllerDriver::ReactToInput()
 {
-
     switch (counter)
     {
 
-        /*     char array[] = {"Error: kekw"};
-            void logError(char array); */
-
     case 1:
-        sendString(uart);
-        if (*verifyCounter == counter)
-        {
-            sound.playSound(uart, 1);
 
-            verifyCounter++;
-            // turn on light 1
-            light.turnOnBrakeLight(1);
-            // play sound
-            sound.playSound(uart, 2);
-            // start car
-            motor.forward(255);
+        if (this->verifyCounter == counter)
+        {
+
+            this->sound->playSound(2);
+            this->verifyCounter += 1;
         }
         break;
+
     case 2:
 
-        if (*verifyCounter == counter)
+        if (this->verifyCounter == counter)
         {
-
-            verifyCounter++;
-            sound.playSound(uart, 2);
+            this->sound->playSound(2);
+            this->verifyCounter += 1;
             // start car
-            motor.forward(255);
+            this->motor->forward(255);
         }
         break;
 
     case 3:
 
-        if (*verifyCounter == counter)
+        if (this->verifyCounter == counter)
         {
-            sound.playSound(uart, 1);
-
-            verifyCounter++;
-            sound.playSound(uart, 2);
+            this->sound->playSound(2);
+            this->verifyCounter += 1;
             // start car
-            motor.forward(255);
+            this->motor->forward(255);
         }
         break;
+
     case 4:
-        if (*verifyCounter == counter)
+
+        if (this->verifyCounter == counter)
         {
-            verifyCounter++;
-            sound.playSound(uart, 2);
+            this->sound->playSound(2);
+            this->verifyCounter += 1;
             // start car
-            motor.forward(255);
+            this->motor->forward(255);
         }
         break;
+
     case 5:
-        if (*verifyCounter == counter)
+
+        if (this->verifyCounter == counter)
         {
-            verifyCounter++;
-            sound.playSound(uart, 2);
+            this->sound->playSound(2);
+            this->verifyCounter += 1;
             // start car
-            motor.forward(255);
+            this->motor->forward(255);
         }
 
         break;
+
     case 6:
-        if (*verifyCounter == counter)
+
+        if (this->verifyCounter == counter)
         {
-            verifyCounter++;
-            sound.playSound(uart, 2);
+            this->sound->playSound(2);
+            this->verifyCounter += 1;
             // start car
-            motor.forward(255);
+            this->motor->forward(255);
         }
         break;
     case 7:
-        if (*verifyCounter == counter)
+
+        if (this->verifyCounter == counter)
         {
-            verifyCounter++;
-            sound.playSound(uart, 2);
+            this->sound->playSound(2);
+            this->verifyCounter += 1;
             // start car
-            motor.forward(255);
+            this->motor->forward(255);
         }
         break;
+
     default:
         break;
     }

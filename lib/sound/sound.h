@@ -5,7 +5,10 @@
 class soundDriver
 {
 public:
-    void playSound(uartDriver, int);
-};
+    soundDriver(uartDriver *);
 
-soundDriver initSoundDriver(uartDriver);
+    void playSound(int);
+
+private:
+    uartDriver *uart;
+};
