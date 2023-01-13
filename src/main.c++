@@ -22,20 +22,19 @@ int main()
     controllerDriver controller(&light, &sound, &motor);
 
     // Stay stuck in the loop until the button if pressed
-    while (controller.buttonPressed())
+    while (!controller.ButtonPressed())
     {
-        char array[] = "YOU HAVE NOT PRESSED THE BUTTON";
-        consoleLog(array);
-        // 2 second delay
-        _delay_ms(2000);
     }
+
+    char array[] = "EXITED THE LOOP";
+    consoleLog(array);
+
     // Initiate start of the car
     controller.StartCar();
 
     // initiate loop that reacts to input
     while (1)
     {
-        _delay_ms(2000);
         controller.ReactToInput();
     }
 }

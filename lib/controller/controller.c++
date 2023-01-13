@@ -4,6 +4,7 @@
 
 #include "uart.h"
 #include "controller.h"
+#include <stdlib.h>
 
 // Prototypes are declared in the .c++ file to prevent other files from calling them
 void initInterrupts();
@@ -12,18 +13,6 @@ void initButtonDriver();
 // Global variable holding the counter
 volatile int counter = 0;
 
-// Global variable to project the counter against multiple interrupts incrementing the counter
-volatile bool boolio = false;
-
-// Recieve signal from the button on PORTA
-// Should prolly be INT0_vect because its PD ben 0
-/* controllerDriver initControllerDriver()
-{
-    initInterrupts();
-    initButtonDriver();
-    return controllerDriver();
-} */
-
 // Constructor
 controllerDriver::controllerDriver(lightDriver *light, soundDriver *sound, motorDriver *motor)
 {
@@ -31,7 +20,7 @@ controllerDriver::controllerDriver(lightDriver *light, soundDriver *sound, motor
     this->sound = sound;
 
     this->motor = motor;
-    this->verifyCounter = 0;
+    this->verifyCounter = 1;
 
     initInterrupts();
     initButtonDriver();
@@ -51,41 +40,57 @@ void initInterrupts()
 void initButtonDriver()
 {
     // 75AD3 which is the same as port 25 on the arduino
-    DDRA &= ~(1 << 3);
+    // DDRA &= ~(1 << 3);
+    DDRA = 0;
 }
 
-char controllerDriver::buttonPressed()
+char controllerDriver::ButtonPressed()
 {
-    if (PORTA == 0b00010000)
+    if ((PINA & 0b10000000) == 0)
     {
         return 1;
     };
     return 0;
-    ;
 }
 // void controllerDriver::StartCar(lightDriver *light, soundDriver *sound, uartDriver *uart, motorDriver *motor)
 void controllerDriver::StartCar()
 {
-    this->sound->playSound(1);
+    /*    this->sound->playSound(1); */
     this->light->turnOnFrontlight();
     // Wait for a set amount (of time // figure out how much time the song needs
-    _delay_ms(5000);
-    this->motor->forward(255);
+    _delay_ms(1000);
+    // set in forward mode
+    /*  this->motor->direction(1);
+
+     this->motor->motorSpeed(2); */
 }
 
 // void controllerDriver::ReactToInput(lightDriver *light, soundDriver *sound, uartDriver *uart, motorDriver *motor, int *verifyCounter)
 void controllerDriver::ReactToInput()
 {
+    char array[] = " COUNTER=";
+    consoleLog(array);
+    SendInteger(counter);
+    char array1[] = " VERIFYCOUNTER=";
+
+    consoleLog(array1);
+    SendInteger(this->verifyCounter);
+
     switch (counter)
     {
-
     case 1:
 
         if (this->verifyCounter == counter)
         {
 
-            this->sound->playSound(2);
+            /*   this->sound->playSound(2); */
             this->verifyCounter += 1;
+            /* this->motor->motorSpeed(1); */
+            /*   this->motor->motorSpeed(3);
+              _delay_ms(100);
+              this->motor->motorSpeed(5);
+              _delay_ms(100);
+              this->motor->motorSpeed(7); */
         }
         break;
 
@@ -93,10 +98,11 @@ void controllerDriver::ReactToInput()
 
         if (this->verifyCounter == counter)
         {
-            this->sound->playSound(2);
+            /*  this->sound->playSound(2); */
             this->verifyCounter += 1;
             // start car
-            this->motor->forward(255);
+            this->motor->motorSpeed(2);
+            // this->motor->motorSpeed(10);
         }
         break;
 
@@ -104,10 +110,11 @@ void controllerDriver::ReactToInput()
 
         if (this->verifyCounter == counter)
         {
+
             this->sound->playSound(2);
             this->verifyCounter += 1;
             // start car
-            this->motor->forward(255);
+            this->motor->motorSpeed(5);
         }
         break;
 
@@ -115,10 +122,11 @@ void controllerDriver::ReactToInput()
 
         if (this->verifyCounter == counter)
         {
+
             this->sound->playSound(2);
             this->verifyCounter += 1;
             // start car
-            this->motor->forward(255);
+            this->motor->motorSpeed(8);
         }
         break;
 
@@ -129,7 +137,7 @@ void controllerDriver::ReactToInput()
             this->sound->playSound(2);
             this->verifyCounter += 1;
             // start car
-            this->motor->forward(255);
+            this->motor->motorSpeed(3);
         }
 
         break;
@@ -141,7 +149,15 @@ void controllerDriver::ReactToInput()
             this->sound->playSound(2);
             this->verifyCounter += 1;
             // start car
-            this->motor->forward(255);
+            this->light->turnOnBrakeLight(2);
+
+            this->motor->stop();
+            _delay_ms(2000);
+            // backwards direction
+            this->motor->direction(0);
+            this->motor->motorSpeed(3);
+            _delay_ms(100);
+            this->motor->motorSpeed(5);
         }
         break;
     case 7:
@@ -150,37 +166,103 @@ void controllerDriver::ReactToInput()
         {
             this->sound->playSound(2);
             this->verifyCounter += 1;
-            // start car
-            this->motor->forward(255);
+
+            this->motor->motorSpeed(3);
         }
         break;
 
+    case 8:
+
+        if (this->verifyCounter == counter)
+        {
+            this->sound->playSound(2);
+            this->verifyCounter += 1;
+            // start car
+            this->motor->stop();
+            _delay_ms(2000);
+            this->motor->direction(1);
+            this->motor->motorSpeed(10);
+        }
+        break;
+
+    case 9:
+
+        if (this->verifyCounter == counter)
+        {
+            this->sound->playSound(2);
+            this->verifyCounter += 1;
+            // start car
+            this->motor->motorSpeed(10);
+        }
+        break;
+
+    case 10:
+
+        if (this->verifyCounter == counter)
+        {
+            this->sound->playSound(2);
+            this->verifyCounter += 1;
+            // start car
+            this->motor->motorSpeed(7);
+        }
+        break;
+
+    case 11:
+
+        if (this->verifyCounter == counter)
+        {
+            this->sound->playSound(2);
+            this->verifyCounter += 1;
+            // start car
+            this->motor->motorSpeed(3);
+            this->motor->stop();
+        }
+        break;
     default:
         break;
     }
 }
 
+// TODO: this is probaly incorrect code it seems to increment twice
+
 // pd ben 0
 ISR(INT0_vect)
 {
-    if (boolio == false)
-    {
-        boolio = true;
-        counter++;
-        _delay_ms(2000);
-        boolio = false;
-    };
-    return;
+    // disable interrupt 0
+    EIMSK &= ~(1 << INT0);
+    // disable interrupt 1
+    EIMSK &= ~(1 << INT1);
+    counter++;
+    _delay_ms(1000);
+
+    // reset interrupt 0 flag
+    EIFR |= (1 << INTF0);
+    // reset interrupt 1 flag
+    EIFR |= (1 << INTF1);
+
+    // enable interrupt 0
+    EIMSK |= (1 << INT0);
+    // enable interrupt 1
+    EIMSK |= (1 << INT1);
 }
 
 // TODO: //should prolly be INT1_vect because its PD ben 1
 ISR(INT1_vect) // Right sensor
 {
-    if (boolio == false)
-    {
-        boolio = true;
-        counter++;
-        _delay_ms(2000);
-        boolio = false;
-    };
+    // disable interrupt 0
+    EIMSK &= ~(1 << INT0);
+    // disable interrupt 1
+    EIMSK &= ~(1 << INT1);
+    counter++;
+    _delay_ms(1000);
+
+    // reset interrupt 0 flag
+    EIFR |= (1 << INTF0);
+    // reset interrupt 1 flag
+    EIFR |= (1 << INTF1);
+
+    // enable interrupt 0
+    EIMSK |= (1 << INT0);
+    // enable interrupt 1
+    EIMSK |= (1 << INT1);
 }

@@ -11,7 +11,7 @@ class controllerDriver
 public:
     controllerDriver(lightDriver *, soundDriver *, motorDriver *);
 
-    char buttonPressed();
+    char ButtonPressed();
     // void StartCar(lightDriver *, soundDriver *, uartDriver *, motorDriver *);
     void StartCar();
     // void ReactToInput(lightDriver *, soundDriver *, uartDriver *, motorDriver *, int *);
