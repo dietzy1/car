@@ -14,7 +14,7 @@ motorDriver::motorDriver()
     TCCR1B = 0b00001011;
     // Følgende vil aktivere PWM signalerne
 }
-void motorDriver::motorSpeed(int refleks)
+void motorDriver::MotorSpeed(int refleks)
 {
     switch (refleks)
     {
@@ -67,7 +67,7 @@ void motorDriver::motorSpeed(int refleks)
     }
 }
 
-void motorDriver::stop()
+void motorDriver::Stop()
 {
     // Slukker motoren
     TCCR1A &= 0b11001111;
@@ -75,7 +75,7 @@ void motorDriver::stop()
     PORTB &= 0b11011111;
 }
 
-void motorDriver::direction(char dir)
+void motorDriver::Direction(char dir)
 {
     // Forward direction
     if (dir == 1)

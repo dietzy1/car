@@ -4,7 +4,7 @@ class uartDriver
 {
 public:
     uartDriver();
-    void sendCommand(char *array);
+    void SendCommand(char *array);
 };
 
 void consoleLog(char *array);

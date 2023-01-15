@@ -8,17 +8,17 @@ lightDriver::lightDriver()
   DDRH = 0xFF;
 }
 
-void lightDriver::turnOnFrontlight()
+void lightDriver::TurnOnFrontlight()
 {
   PORTH = 0b00010000; // Turn on PH4, equivalent to LED4
 }
 
-void lightDriver::turnOffFrontlight()
+void lightDriver::TurnOffFrontlight()
 {
   PORTH = 0b00000000;
 }
 
-void lightDriver::turnOnBrakeLight(int intensity)
+void lightDriver::TurnOnBrakeLight(int intensity)
 {
   // PORTB = 0b10000000
   // PORTB = 0b10000000; // Brug pin OC0A til at teste med 100% duty cycle (ca. 50 mA) & brug pin OC1A, som består af en duty cycle på 20% (ca. 10 mA)
@@ -47,7 +47,7 @@ void lightDriver::turnOnBrakeLight(int intensity)
   };
 }
 
-void lightDriver::turnOffBrakeLight()
+void lightDriver::TurnOffBrakeLight()
 {
   PORTB = 0b00000000;
 }

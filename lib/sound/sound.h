@@ -7,7 +7,7 @@ class soundDriver
 public:
     soundDriver(uartDriver *);
 
-    void playSound(int);
+    void PlaySound(int);
 
 private:
     uartDriver *uart;

@@ -5,7 +5,7 @@ class motorDriver
 {
 public:
     motorDriver();
-    void motorSpeed(int refleks);
-    void direction(char dir);
-    void stop();
+    void MotorSpeed(int refleks);
+    void Direction(char dir);
+    void Stop();
 };

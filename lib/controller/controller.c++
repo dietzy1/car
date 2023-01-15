@@ -44,6 +44,8 @@ void initButtonDriver()
     DDRA = 0;
 }
 
+// This functions  checks for the input from the button 7 on the arduino shield
+// If the button is pressed 1(true) is returned and the main function should break out of the while loop.
 char controllerDriver::ButtonPressed()
 {
     if ((PINA & 0b10000000) == 0)
@@ -52,20 +54,22 @@ char controllerDriver::ButtonPressed()
     };
     return 0;
 }
-// void controllerDriver::StartCar(lightDriver *light, soundDriver *sound, uartDriver *uart, motorDriver *motor)
+
 void controllerDriver::StartCar()
 {
-    /*    this->sound->playSound(1); */
-    this->light->turnOnFrontlight();
+    this->sound->PlaySound(1);
+    this->light->TurnOnFrontlight();
+
     // Wait for a set amount (of time // figure out how much time the song needs
     _delay_ms(1000);
     // set in forward mode
-    /*  this->motor->direction(1);
+    this->motor->Direction(1);
 
-     this->motor->motorSpeed(2); */
+    // motor->direction(1);
+
+    this->motor->MotorSpeed(2);
 }
 
-// void controllerDriver::ReactToInput(lightDriver *light, soundDriver *sound, uartDriver *uart, motorDriver *motor, int *verifyCounter)
 void controllerDriver::ReactToInput()
 {
     char array[] = " COUNTER=";
@@ -82,15 +86,14 @@ void controllerDriver::ReactToInput()
 
         if (this->verifyCounter == counter)
         {
-
-            /*   this->sound->playSound(2); */
+            this->sound->PlaySound(2);
             this->verifyCounter += 1;
-            /* this->motor->motorSpeed(1); */
-            /*   this->motor->motorSpeed(3);
-              _delay_ms(100);
-              this->motor->motorSpeed(5);
-              _delay_ms(100);
-              this->motor->motorSpeed(7); */
+            this->motor->MotorSpeed(1);
+            this->motor->MotorSpeed(3);
+            _delay_ms(100);
+            this->motor->MotorSpeed(5);
+            _delay_ms(100);
+            this->motor->MotorSpeed(7);
         }
         break;
 
@@ -101,7 +104,7 @@ void controllerDriver::ReactToInput()
             /*  this->sound->playSound(2); */
             this->verifyCounter += 1;
             // start car
-            this->motor->motorSpeed(2);
+            this->motor->MotorSpeed(2);
             // this->motor->motorSpeed(10);
         }
         break;
@@ -111,10 +114,10 @@ void controllerDriver::ReactToInput()
         if (this->verifyCounter == counter)
         {
 
-            this->sound->playSound(2);
+            this->sound->PlaySound(2);
             this->verifyCounter += 1;
             // start car
-            this->motor->motorSpeed(5);
+            this->motor->MotorSpeed(5);
         }
         break;
 
@@ -123,10 +126,10 @@ void controllerDriver::ReactToInput()
         if (this->verifyCounter == counter)
         {
 
-            this->sound->playSound(2);
+            this->sound->PlaySound(2);
             this->verifyCounter += 1;
             // start car
-            this->motor->motorSpeed(8);
+            this->motor->MotorSpeed(8);
         }
         break;
 
@@ -134,10 +137,10 @@ void controllerDriver::ReactToInput()
 
         if (this->verifyCounter == counter)
         {
-            this->sound->playSound(2);
+            this->sound->PlaySound(2);
             this->verifyCounter += 1;
             // start car
-            this->motor->motorSpeed(3);
+            this->motor->MotorSpeed(3);
         }
 
         break;
@@ -146,28 +149,28 @@ void controllerDriver::ReactToInput()
 
         if (this->verifyCounter == counter)
         {
-            this->sound->playSound(2);
+            this->sound->PlaySound(2);
             this->verifyCounter += 1;
             // start car
-            this->light->turnOnBrakeLight(2);
+            this->light->TurnOnBrakeLight(2);
 
-            this->motor->stop();
+            this->motor->Stop();
             _delay_ms(2000);
             // backwards direction
-            this->motor->direction(0);
-            this->motor->motorSpeed(3);
+            this->motor->Direction(0);
+            this->motor->MotorSpeed(3);
             _delay_ms(100);
-            this->motor->motorSpeed(5);
+            this->motor->MotorSpeed(5);
         }
         break;
     case 7:
 
         if (this->verifyCounter == counter)
         {
-            this->sound->playSound(2);
+            this->sound->PlaySound(2);
             this->verifyCounter += 1;
 
-            this->motor->motorSpeed(3);
+            this->motor->MotorSpeed(3);
         }
         break;
 
@@ -175,13 +178,13 @@ void controllerDriver::ReactToInput()
 
         if (this->verifyCounter == counter)
         {
-            this->sound->playSound(2);
+            this->sound->PlaySound(2);
             this->verifyCounter += 1;
             // start car
-            this->motor->stop();
+            this->motor->Stop();
             _delay_ms(2000);
-            this->motor->direction(1);
-            this->motor->motorSpeed(10);
+            this->motor->Direction(1);
+            this->motor->MotorSpeed(10);
         }
         break;
 
@@ -189,10 +192,10 @@ void controllerDriver::ReactToInput()
 
         if (this->verifyCounter == counter)
         {
-            this->sound->playSound(2);
+            this->sound->PlaySound(2);
             this->verifyCounter += 1;
             // start car
-            this->motor->motorSpeed(10);
+            this->motor->MotorSpeed(10);
         }
         break;
 
@@ -200,10 +203,10 @@ void controllerDriver::ReactToInput()
 
         if (this->verifyCounter == counter)
         {
-            this->sound->playSound(2);
+            this->sound->PlaySound(2);
             this->verifyCounter += 1;
             // start car
-            this->motor->motorSpeed(7);
+            this->motor->MotorSpeed(7);
         }
         break;
 
@@ -211,11 +214,11 @@ void controllerDriver::ReactToInput()
 
         if (this->verifyCounter == counter)
         {
-            this->sound->playSound(2);
+            this->sound->PlaySound(2);
             this->verifyCounter += 1;
             // start car
-            this->motor->motorSpeed(3);
-            this->motor->stop();
+            this->motor->MotorSpeed(3);
+            this->motor->Stop();
         }
         break;
     default:

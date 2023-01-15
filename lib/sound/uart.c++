@@ -19,21 +19,9 @@ void sendChar(char Char)
     UDR0 = Char;
 }
 
-void sendString(uartDriver uart)
-{
-    sendChar(0x7E);
-    sendChar(0x0D);
-    sendChar(0x00);
-    sendChar(0x00);
-    sendChar(0x00);
-    sendChar(0xFF);
-    sendChar(0xF3);
-    sendChar(0xEF);
-}
-
 // TODO:
 //  This command needs to be tested
-void uartDriver::sendCommand(char *array)
+void uartDriver::SendCommand(char *array)
 {
     for (int i = 0; i < 8; i++)
     {
