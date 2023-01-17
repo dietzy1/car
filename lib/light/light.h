@@ -6,8 +6,8 @@ class lightDriver
 public:
     lightDriver();
 
-    void turnOnFrontlight();
-    void turnOffFrontlight();
-    void turnOnBrakeLight(int);
-    void turnOffBrakeLight();
+    void TurnOnFrontlight();
+    void TurnOffFrontlight();
+    void TurnOnBrakeLight(int);
+    void TurnOffBrakeLight();
 };

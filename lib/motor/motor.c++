@@ -85,11 +85,11 @@ void motorDriver::Direction(char dir)
     }
 
     // Backwards direction
-    else if (dir == 0)
+    if (dir == 0)
     {
-        // Sender 5V ud til spolen
-        PORTB |= 0b00100000;
         // Tænder for OC1B
         TCCR1A |= 0b00110000;
+        // Sender 5V ud til spolen
+        PORTB |= 0b00100000;
     }
 }
