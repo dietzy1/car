@@ -8,8 +8,8 @@ soundDriver::soundDriver(uartDriver *uart)
     // inject the uartdriver into the sounddriver as a private variabel
     this->uart = uart;
     // increase volume to 30
-    /*    char array[8] = {0x7E, 0x06, 0x00, 0x00, 0x1E, 0xFF, 0xDC, 0xEF};
-       this->uart->sendCommand(array); */
+    char array[8] = {0x7E, 0x06, 0x00, 0x00, 0x1E, 0xFF, 0xDC, 0xEF};
+    this->uart->SendCommand(array);
 }
 
 void soundDriver::PlaySound(int songNumber)

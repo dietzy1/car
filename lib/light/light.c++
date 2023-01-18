@@ -49,5 +49,6 @@ void lightDriver::TurnOnBrakeLight(int intensity)
 
 void lightDriver::TurnOffBrakeLight()
 {
-  PORTB = 0b00000000;
+  TCCR4B = 0b00000000;
+  PORTH = 0b00000000;
 }

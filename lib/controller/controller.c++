@@ -1,5 +1,6 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#define f_CPU 16000000
 #include <util/delay.h>
 
 #include "uart.h"
@@ -29,23 +30,17 @@ controllerDriver::controllerDriver(lightDriver *light, soundDriver *sound, motor
 // Function that enabled interupts for the left and right sensor on the car
 void initInterrupts()
 {
-    // Rising edge interupt is enabled for INT0 and INT1
-    // EICRA |= 0b00001111;
-    // Enables INT0 and INT1
-    // EIMSK |= 0b00000011;
-    // call sei to enable interrupts
-
     // enable rising edge interupt for INT2 and INT3
     EICRA |= 0b11110000;
     // Enables INT2 and INT3
     EIMSK |= 0b00001100;
+    // call sei to enable interrupts
     sei();
 }
 
 void initButtonDriver()
 {
-    // 75AD3 which is the same as port 25 on the arduino
-    // DDRA &= ~(1 << 3);
+    // set pin 7 to input
     DDRA = 0;
 }
 
@@ -66,10 +61,17 @@ void controllerDriver::StartCar()
     this->light->TurnOnFrontlight();
 
     // Wait for a set amount (of time // figure out how much time the song needs
-    _delay_ms(1000);
+    _delay_ms(10000);
+    this->light->TurnOnBrakeLight(1);
+
     // set in forward mode
     this->motor->Direction(1);
+    this->motor->MotorSpeed(2);
 
+    // have intervals to simulate acceleration
+    _delay_ms(500);
+    this->motor->MotorSpeed(4);
+    _delay_ms(500);
     this->motor->MotorSpeed(6);
 }
 
@@ -91,7 +93,7 @@ void controllerDriver::ReactToInput()
         {
             this->sound->PlaySound(2);
             this->verifyCounter += 1;
-            this->motor->MotorSpeed(6);
+            this->motor->MotorSpeed(7);
         }
         break;
 
@@ -99,10 +101,10 @@ void controllerDriver::ReactToInput()
 
         if (this->verifyCounter == counter)
         {
-            /*  this->sound->playSound(2); */
+            this->sound->PlaySound(2);
             this->verifyCounter += 1;
             // start car
-            this->motor->MotorSpeed(7);
+            this->motor->MotorSpeed(8);
             // this->motor->motorSpeed(10);
         }
         break;
@@ -115,7 +117,18 @@ void controllerDriver::ReactToInput()
             this->sound->PlaySound(2);
             this->verifyCounter += 1;
             // start car
-            this->motor->MotorSpeed(1);
+            this->motor->Stop();
+            _delay_ms(300);
+
+            this->motor->Direction(0);
+            this->motor->MotorSpeed(3);
+            _delay_ms(300);
+            this->motor->Stop();
+
+            this->motor->Direction(1);
+            this->motor->MotorSpeed(2);
+            _delay_ms(300);
+            this->motor->MotorSpeed(4);
         }
         break;
 
@@ -127,7 +140,7 @@ void controllerDriver::ReactToInput()
             this->sound->PlaySound(2);
             this->verifyCounter += 1;
             // start car
-            this->motor->MotorSpeed(4);
+            this->motor->MotorSpeed(6);
         }
         break;
 
@@ -138,7 +151,7 @@ void controllerDriver::ReactToInput()
             this->sound->PlaySound(2);
             this->verifyCounter += 1;
             // start car
-            this->motor->MotorSpeed(3);
+            this->motor->MotorSpeed(5);
         }
 
         break;
@@ -153,10 +166,10 @@ void controllerDriver::ReactToInput()
             this->light->TurnOnBrakeLight(2);
 
             this->motor->Stop();
-            _delay_ms(1000);
+
             // backwards direction
             this->motor->Direction(0);
-            this->motor->MotorSpeed(4);
+            this->motor->MotorSpeed(6);
         }
         break;
     case 7:
@@ -166,7 +179,7 @@ void controllerDriver::ReactToInput()
             this->sound->PlaySound(2);
             this->verifyCounter += 1;
 
-            this->motor->MotorSpeed(5);
+            this->motor->MotorSpeed(7);
         }
         break;
 
@@ -182,7 +195,7 @@ void controllerDriver::ReactToInput()
             this->light->TurnOnBrakeLight(1);
             _delay_ms(300);
             this->motor->Direction(1);
-            this->motor->MotorSpeed(5);
+            this->motor->MotorSpeed(7);
         }
         break;
 
@@ -193,6 +206,7 @@ void controllerDriver::ReactToInput()
             this->sound->PlaySound(2);
             this->verifyCounter += 1;
             // start car
+            this->motor->MotorSpeed(7);
         }
         break;
 
@@ -203,17 +217,18 @@ void controllerDriver::ReactToInput()
             this->sound->PlaySound(2);
             this->verifyCounter += 1;
             // start car
-            this->motor->MotorSpeed(5);
+            this->motor->MotorSpeed(7);
         }
         break;
     case 11:
         if (this->verifyCounter == counter)
         {
-            this->sound->PlaySound(2);
+            this->sound->PlaySound(3);
             this->verifyCounter += 1;
             // start car
             this->motor->Stop();
             this->light->TurnOffBrakeLight();
+            this->light->TurnOffFrontlight();
         }
         break;
 
@@ -234,7 +249,7 @@ ISR(INT2_vect)
     EIMSK &= ~(1 << INT3);
 
     counter++;
-    _delay_ms(700);
+    _delay_ms(400);
 
     // reset interrupt 2 flag
     EIFR |= (1 << INTF2);
@@ -259,7 +274,7 @@ ISR(INT3_vect) // Right sensor
     EIMSK &= ~(1 << INT2);
 
     counter++;
-    _delay_ms(700);
+    _delay_ms(400);
 
     // reset interrupt 0 flag
     EIFR |= (1 << INTF3);
