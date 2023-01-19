@@ -36,6 +36,7 @@ int main()
     while (1)
     {
         controller.ReactToInput();
+        // controller.ReactToPsycho();
     }
 }
 

@@ -16,6 +16,7 @@ public:
     void StartCar();
     // void ReactToInput(lightDriver *, soundDriver *, uartDriver *, motorDriver *, int *);
     void ReactToInput();
+    void ReactToPsycho();
 
 private:
     int verifyCounter;
