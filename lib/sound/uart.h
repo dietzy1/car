@@ -7,6 +7,6 @@ public:
     void SendCommand(char *array);
 };
 
+// Exported error logging functions
 void consoleLog(char *array);
-void SendString(char *Streng);
-void SendInteger(int Tal);
+void consoleLogInteger(int integer);

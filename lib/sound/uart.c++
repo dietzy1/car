@@ -19,26 +19,13 @@ void sendChar(char Char)
     UDR0 = Char;
 }
 
-// TODO:
-//  This command needs to be tested
+// send an array of 8 hex bytes to the uart
 void uartDriver::SendCommand(char *array)
 {
     for (int i = 0; i < 8; i++)
     {
-        char tmp = array[i]; // This here is nessecary for some shitty reason which is beyond my comprehension
+        char tmp = array[i];
         sendChar(tmp);
-    }
-}
-
-void consoleLog(char *array)
-{
-    // Repeat until zero-termination
-    while (*array != 0)
-    {
-        // Send the character pointed to by "Streng"
-        sendChar(*array);
-        // Advance the pointer one step
-        array++;
     }
 }
 
@@ -52,30 +39,24 @@ uartDriver::uartDriver()
     UBRR0 = XTAL / 16 / 9600 - 1;
 }
 
-void SendString(char *Streng)
+void consoleLog(char *array)
 {
     // Repeat until zero-termination
-    while (*Streng != 0)
+    while (*array != 0)
     {
-        // Send the character pointed to by "Streng"
-        sendChar(*Streng);
+        // Send the character pointed to
+        sendChar(*array);
         // Advance the pointer one step
-        Streng++;
+        array++;
     }
 }
 
-/*************************************************************************
-Converts the integer "Tal" to an ASCII string - and then sends this string
-using the USART.
-Makes use of the C standard library <stdlib.h>.
-Parameter:
-    Tal: The integer to be converted and sent.
-*************************************************************************/
-void SendInteger(int Tal)
+// exported function used for errorlogging numbers
+void consoleLogInteger(int integer)
 {
     char array[7];
     // Convert the integer to an ASCII string (array), radix = 10
-    itoa(Tal, array, 10);
+    itoa(integer, array, 10);
     // - then send the string
-    SendString(array);
+    consoleLog(array);
 }

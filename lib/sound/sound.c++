@@ -20,7 +20,7 @@ void soundDriver::PlaySound(int songNumber)
     {
 
         // plays 1st track in the 1st folder on the SD card
-        // char array[8] = {0x7E, 0x03, 0x00, 0x00, 0x02, 0xFF, 0xFB, 0xEF};
+
         char array[8] = {0x7E, 0x0F, 0x00, 0x01, 0x01, 0xFF, 0xEF, 0xEF};
         this->uart->SendCommand(array);
         _delay_ms(50);
@@ -28,8 +28,8 @@ void soundDriver::PlaySound(int songNumber)
     }
     case 2:
     {
-        // TODO:: NOT TESTED YET NEED TO FIND OUT IF COMMAND IS VALID
-        //  plays 2nd track in the 1st folder on the SD card
+
+        // plays 2nd track in the 1st folder on the SD card
         char array[8] = {0x7E, 0x0F, 0x00, 0x01, 0x02, 0xFF, 0xEE, 0xEF};
         this->uart->SendCommand(array);
         _delay_ms(50);
@@ -37,7 +37,6 @@ void soundDriver::PlaySound(int songNumber)
     }
     case 3:
     {
-        // TODO:: NOT TESTED YET NEED TO FIND OUT IF COMMAND IS VALID
         //  plays 3rd track in the 1st folder on the SD card
         char array[8] = {0x7E, 0x0F, 0x00, 0x01, 0x03, 0xFF, 0xED, 0xEF};
         this->uart->SendCommand(array);

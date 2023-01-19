@@ -77,13 +77,15 @@ void controllerDriver::StartCar()
 
 void controllerDriver::ReactToInput()
 {
+    // Primitive error logging used to determine if there is noice in the reflex input
     char array[] = " COUNTER=";
     consoleLog(array);
-    SendInteger(counter);
-    char array1[] = " VERIFYCOUNTER=";
+    consoleLogInteger(counter);
 
+    // Primitive error logging used to determine if there is noice in the reflex input
+    char array1[] = " VERIFYCOUNTER=";
     consoleLog(array1);
-    SendInteger(this->verifyCounter);
+    consoleLogInteger(this->verifyCounter);
 
     switch (counter)
     {
@@ -103,7 +105,7 @@ void controllerDriver::ReactToInput()
         {
             this->sound->PlaySound(2);
             this->verifyCounter += 1;
-            // start car
+
             this->motor->MotorSpeed(2);
             _delay_ms(200);
             this->motor->MotorSpeed(4);
@@ -123,7 +125,7 @@ void controllerDriver::ReactToInput()
 
             this->sound->PlaySound(2);
             this->verifyCounter += 1;
-            // start car
+
             this->motor->Stop();
             _delay_ms(50);
 
@@ -205,7 +207,7 @@ void controllerDriver::ReactToInput()
         {
             this->sound->PlaySound(2);
             this->verifyCounter += 1;
-            // start car
+
             this->motor->MotorSpeed(5);
             this->motor->Stop();
             this->light->TurnOnBrakeLight(1);
@@ -225,7 +227,7 @@ void controllerDriver::ReactToInput()
         {
             this->sound->PlaySound(2);
             this->verifyCounter += 1;
-            // start car
+
             this->motor->MotorSpeed(7);
         }
         break;
@@ -236,7 +238,7 @@ void controllerDriver::ReactToInput()
         {
             this->sound->PlaySound(2);
             this->verifyCounter += 1;
-            // start car
+
             this->motor->MotorSpeed(7);
         }
         break;
@@ -245,7 +247,7 @@ void controllerDriver::ReactToInput()
         {
             this->sound->PlaySound(3);
             this->verifyCounter += 1;
-            // start car
+
             this->motor->Stop();
             this->light->TurnOffBrakeLight();
             this->light->TurnOffFrontlight();
@@ -281,177 +283,26 @@ ISR(INT2_vect)
     EIMSK |= (1 << INT3);
 }
 
-ISR(INT3_vect) // Right sensor
+ISR(INT3_vect)
 {
-    // disable interrupt 0
+    // disable interrupt 3
     EIMSK &= ~(1 << INT3);
 
-    // disable interrupt 1
+    // disable interrupt 2
     EIMSK &= ~(1 << INT2);
 
     counter++;
     _delay_ms(400);
 
-    // reset interrupt 0 flag
+    // reset interrupt 3
     EIFR |= (1 << INTF3);
 
-    // reset interrupt 1 flag
+    // reset interrupt 2
     EIFR |= (1 << INTF2);
 
-    // enable interrupt 0
+    // enable interrupt 3
     EIMSK |= (1 << INT3);
 
-    // enable interrupt 1
+    // enable interrupt 2
     EIMSK |= (1 << INT2);
-}
-
-void controllerDriver::ReactToPsycho()
-{
-    char array[] = " COUNTER=";
-    consoleLog(array);
-    SendInteger(counter);
-    char array1[] = " VERIFYCOUNTER=";
-
-    consoleLog(array1);
-    SendInteger(this->verifyCounter);
-
-    switch (counter)
-    {
-    case 1:
-
-        if (this->verifyCounter == counter)
-        {
-            this->sound->PlaySound(2);
-            this->verifyCounter += 1;
-            this->motor->MotorSpeed(10);
-        }
-        break;
-
-    case 2:
-
-        if (this->verifyCounter == counter)
-        {
-            this->sound->PlaySound(2);
-            this->verifyCounter += 1;
-            // start car
-            this->motor->MotorSpeed(10);
-
-            // this->motor->motorSpeed(10);
-        }
-        break;
-
-    case 3:
-
-        if (this->verifyCounter == counter)
-        {
-
-            this->sound->PlaySound(2);
-            this->verifyCounter += 1;
-            // start car
-            this->motor->MotorSpeed(10);
-        }
-        break;
-
-    case 4:
-
-        if (this->verifyCounter == counter)
-        {
-
-            this->sound->PlaySound(2);
-            this->verifyCounter += 1;
-            // start car
-            this->motor->MotorSpeed(10);
-        }
-        break;
-
-    case 5:
-
-        if (this->verifyCounter == counter)
-        {
-            this->sound->PlaySound(2);
-            this->verifyCounter += 1;
-            // start car
-            this->motor->MotorSpeed(10);
-        }
-
-        break;
-
-    case 6:
-
-        if (this->verifyCounter == counter)
-        {
-            this->sound->PlaySound(2);
-            this->verifyCounter += 1;
-            // start car
-            this->light->TurnOnBrakeLight(2);
-
-            this->motor->Stop();
-
-            // backwards direction
-            this->motor->Direction(0);
-            this->motor->MotorSpeed(10);
-        }
-        break;
-    case 7:
-
-        if (this->verifyCounter == counter)
-        {
-            this->sound->PlaySound(2);
-            this->verifyCounter += 1;
-
-            this->motor->MotorSpeed(10);
-        }
-        break;
-
-    case 8:
-
-        if (this->verifyCounter == counter)
-        {
-            this->sound->PlaySound(2);
-            this->verifyCounter += 1;
-            // start car
-            this->motor->Stop();
-            this->light->TurnOnBrakeLight(1);
-
-            this->motor->Direction(1);
-            this->motor->MotorSpeed(10);
-        }
-        break;
-
-    case 9:
-
-        if (this->verifyCounter == counter)
-        {
-            this->sound->PlaySound(2);
-            this->verifyCounter += 1;
-            // start car
-            this->motor->MotorSpeed(10);
-        }
-        break;
-
-    case 10:
-
-        if (this->verifyCounter == counter)
-        {
-            this->sound->PlaySound(2);
-            this->verifyCounter += 1;
-            // start car
-            this->motor->MotorSpeed(10);
-        }
-        break;
-    case 11:
-        if (this->verifyCounter == counter)
-        {
-            this->sound->PlaySound(3);
-            this->verifyCounter += 1;
-            // start car
-            this->motor->Stop();
-            this->light->TurnOffBrakeLight();
-            this->light->TurnOffFrontlight();
-        }
-        break;
-
-    default:
-        break;
-    }
 }
